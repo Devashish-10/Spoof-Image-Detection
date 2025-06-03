@@ -1,6 +1,6 @@
 streamlit
 numpy
-tensorflow
+tensorflow == 2.6.0
 Pillow
 opencv-python-headless
 gdown
