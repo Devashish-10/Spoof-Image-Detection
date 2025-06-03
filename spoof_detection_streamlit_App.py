@@ -3,9 +3,20 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 import cv2
+import os
+import gdown
+
+# Google Drive File ID (replace this with your actual file ID)
+FILE_ID = "1-W3XEcLKsce_ULy6BMgEkFdqxIIUoOxk" 
+MODEL_PATH = "spook_classifier_model.h5"
+
+# Download model from Google Drive if not already downloaded
+if not os.path.exists(MODEL_PATH):
+    with st.spinner("Downloading model..."):
+        gdown.download(f"https://drive.google.com/uc?id={FILE_ID}", MODEL_PATH, quiet=False)
 
 # Load trained model
-model = tf.keras.models.load_model("spook_classifier_model.h5")
+model = tf.keras.models.load_model(MODEL_PATH)
 img_height, img_width = 150, 150
 
 # Prediction function
@@ -22,7 +33,7 @@ st.title("Spoof Detection System")
 st.markdown("### Detect whether an image is **REAL** or **SPOOFED** using a trained deep learning model.")
 
 # Tabs: Upload Image or Webcam
-tab1, tab2 = st.tabs(["📤 Upload Image", "📷 Use Webcam"])
+tab1, tab2 = st.tabs([" Upload Image", " Use Webcam"])
 
 with tab1:
     st.subheader("Upload an Image")
@@ -52,7 +63,7 @@ with tab2:
         pil_img = Image.fromarray(img)
         label = predict_image(pil_img)
 
-        # Overlay prediction (without confidence)
+        # Overlay prediction
         cv2.putText(frame, f"{label}", (10, 30), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0) if label == "REAL" else (0,0,255), 2)
 
